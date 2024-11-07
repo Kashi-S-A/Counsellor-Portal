@@ -35,8 +35,10 @@ public class Enquiry {
 	private Course course;
 	
 	@Enumerated(EnumType.STRING)
-	private ClassMode classMode;
+	@Column(nullable = false)
+	private ClassMode classMode=ClassMode.OFFLINE;
 	
+	@Column(nullable = false)
 	private Double fees;
 	
 	@ManyToOne

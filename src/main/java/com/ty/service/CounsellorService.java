@@ -19,4 +19,5 @@ public interface CounsellorService {
 	ResponseEntity<?> getCounsellor(Integer cid);
 	
 	ResponseEntity<?> deleteCounsellor(Integer cid);
+	
 }

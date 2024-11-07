@@ -39,7 +39,8 @@ public class Counsellor {
 	private String password;
 
 	@Enumerated(EnumType.STRING)
-	private Status status;
+	@Column(nullable = false)
+	private Status status=Status.ACTIVE;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "counsellor")
 	private List<Enquiry> enquiries;

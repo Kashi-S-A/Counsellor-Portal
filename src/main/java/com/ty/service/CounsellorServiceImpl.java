@@ -2,6 +2,7 @@ package com.ty.service;
 
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +39,11 @@ public class CounsellorServiceImpl implements CounsellorService {
 		} else {
 			Counsellor save = counsellorRepository.save(counsellor);
 
-			ObjectMapper mapper = new ObjectMapper();
-			CounsellorDto dto = mapper.convertValue(save, CounsellorDto.class);
+//			ObjectMapper mapper = new ObjectMapper();
+//			CounsellorDto dto = mapper.convertValue(save, CounsellorDto.class);
+
+			CounsellorDto dto = new CounsellorDto();
+			BeanUtils.copyProperties(save, dto);
 
 			ResponseStructure<CounsellorDto> rs = new ResponseStructure<>();
 			rs.setStatusCode(HttpStatus.CREATED.value());
@@ -68,24 +72,54 @@ public class CounsellorServiceImpl implements CounsellorService {
 		return new ResponseEntity<ResponseStructure<String>>(rs, HttpStatus.OK);
 	}
 
+	/*
+	 * Find the counsellor based on id if exist update the new Status else throw
+	 * exception
+	 */
 	@Override
 	public ResponseEntity<?> updateStatus(Integer cid, Status status) {
-		// TODO Auto-generated method stub
-		return null;
+		Counsellor counsellor = counsellorRepository.findById(cid)
+				.orElseThrow(() -> new CounsellorNotFound("Counsellor is not registered"));
+		counsellor.setStatus(status);
+		Counsellor save = counsellorRepository.save(counsellor);
+		ResponseStructure<Status> rs = new ResponseStructure<>();
+		rs.setStatusCode(HttpStatus.OK.value());
+		rs.setMessage("Status Updated Successfully");
+		rs.setData(save.getStatus());
+		return new ResponseEntity<ResponseStructure<Status>>(rs, HttpStatus.OK);
 	}
 
+	/*
+	 * update Phone if counsellor exists based on id else throw the exception
+	*/
 	@Override
 	public ResponseEntity<?> updatePhone(Integer cid, Long phone) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/*
+	 * Fetch and return counsellor if exist based id else throw exception
+	 */
 	@Override
 	public ResponseEntity<?> getCounsellor(Integer cid) {
-		// TODO Auto-generated method stub
-		return null;
+		Counsellor counsellor = counsellorRepository.findById(cid)
+				.orElseThrow(() -> new CounsellorNotFound("Counsellor is exist"));
+
+		CounsellorDto dto = new CounsellorDto();
+
+		BeanUtils.copyProperties(counsellor, dto);
+
+		ResponseStructure<CounsellorDto> rs = new ResponseStructure<>();
+		rs.setStatusCode(HttpStatus.OK.value());
+		rs.setMessage("Fetched Successfully");
+		rs.setData(dto);
+		return new ResponseEntity<ResponseStructure<CounsellorDto>>(rs, HttpStatus.OK);
 	}
 
+	/*
+	 * Delete counsellor if exists based on id else throw exception 
+	*/
 	@Override
 	public ResponseEntity<?> deleteCounsellor(Integer cid) {
 		// TODO Auto-generated method stub
