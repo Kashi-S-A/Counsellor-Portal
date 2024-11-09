@@ -1,5 +1,6 @@
 package com.ty.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ty.enums.ClassMode;
 import com.ty.enums.Course;
 
@@ -43,5 +44,6 @@ public class Enquiry {
 	
 	@ManyToOne
 	@JoinColumn(name = "cid")
+	@JsonIgnore
 	private Counsellor counsellor;
 }

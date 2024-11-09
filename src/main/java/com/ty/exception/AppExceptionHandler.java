@@ -20,4 +20,15 @@ public class AppExceptionHandler {
 
 		return new ResponseEntity<ResponseStructure<String>>(rs, HttpStatus.OK);
 	}
+	
+	@ExceptionHandler(EnquiryNotFound.class)
+	public ResponseEntity<ResponseStructure<String>> catchEnquiryNotFound(EnquiryNotFound message) {
+	
+		ResponseStructure<String> rs = new ResponseStructure<>();
+		rs.setStatusCode(HttpStatus.NOT_FOUND.value());
+		rs.setMessage("Enquiry is Not found/added");
+		rs.setData(null);
+
+		return new ResponseEntity<ResponseStructure<String>>(rs, HttpStatus.OK);
+	}
 }
